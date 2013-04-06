@@ -37,6 +37,8 @@ else
   server_fqdn = node['fqdn']
 end
 
+secure_password = 'secret'
+
 node.set_unless['wordpress']['db']['password'] = secure_password
 node.set_unless['wordpress']['keys']['auth'] = secure_password
 node.set_unless['wordpress']['keys']['secure_auth'] = secure_password
