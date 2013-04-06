@@ -94,7 +94,7 @@ template "#{node['mysql']['conf_dir']}/wp-grants.sql" do
     :password => node['wordpress']['db']['password'],
     :database => node['wordpress']['db']['database']
   )
-  notifies :run, "execute[mysql-install-wp-privileges]", :immediately
+  #notifies :run, "execute[mysql-install-wp-privileges]", :immediately
 end
 
 execute "create #{node['wordpress']['db']['database']} database" do
@@ -107,7 +107,7 @@ execute "create #{node['wordpress']['db']['database']} database" do
     m = Mysql.new("localhost", "root", node['mysql']['server_root_password'])
     m.list_dbs.include?(node['wordpress']['db']['database'])
   end
-  notifies :create, "ruby_block[save node data]", :immediately unless Chef::Config[:solo]
+  #notifies :create, "ruby_block[save node data]", :immediately unless Chef::Config[:solo]
 end
 
 # save node data after writing the MYSQL root password, so that a failed chef-client run that gets this far doesn't cause an unknown password to get applied to the box without being saved in the node data.
@@ -138,7 +138,7 @@ template "#{node['wordpress']['dir']}/wp-config.php" do
     :logged_in_key   => node['wordpress']['keys']['logged_in'],
     :nonce_key       => node['wordpress']['keys']['nonce']
   )
-  notifies :write, "log[Navigate to 'http://#{server_fqdn}/wp-admin/install.php' to complete wordpress installation]"
+  #notifies :write, "log[Navigate to 'http://#{server_fqdn}/wp-admin/install.php' to complete wordpress installation]"
 end
 
 apache_site "000-default" do
