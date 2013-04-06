@@ -27,9 +27,10 @@ include_recipe "apache2::mod_php5"
 # the release of 0.10.10 and the inclusion of the new chef_gem. 
 # code curtesy @hectcastro
 # http://tickets.opscode.com/browse/COOK-1009
-gem_package "mysql" do
-  action :install
-end
+# gem_package "mysql" do
+#   action :install
+# end
+
 
 if node.has_key?("ec2")
   server_fqdn = node['ec2']['public_hostname']
