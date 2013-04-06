@@ -102,10 +102,9 @@ execute "create #{node['wordpress']['db']['database']} database" do
   not_if do
     # Make sure gem is detected if it was just installed earlier in this recipe
     require 'rubygems'
-    # Gem.clear_paths
-    # require 'mysql'
-    # m = Mysql.new("localhost", "root", node['mysql']['server_root_password'])
-    # m.list_dbs.include?(node['wordpress']['db']['database'])
+    require 'mysql'
+    m = Mysql.new("localhost", "root", node['mysql']['server_root_password'])
+    m.list_dbs.include?(node['wordpress']['db']['database'])
   end
   #notifies :create, "ruby_block[save node data]", :immediately unless Chef::Config[:solo]
 end
