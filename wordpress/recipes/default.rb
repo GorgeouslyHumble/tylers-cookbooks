@@ -108,7 +108,7 @@ execute "create #{node['wordpress']['db']['database']} database" do
     # m = Mysql.new("localhost", "root", node['mysql']['server_root_password'])
     # m.list_dbs.include?(node['wordpress']['db']['database'])
   end
-  notifies :create, resources(:execute => "save node data")
+  notifies :create, resources(:ruby_block => "save node data")
 end
 
 
