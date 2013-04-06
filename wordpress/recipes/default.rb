@@ -31,6 +31,8 @@ gem_package "mysql" do
   action :install
 end
 
+Gem.clear_paths
+
 if node.has_key?("ec2")
   server_fqdn = node['ec2']['public_hostname']
 else
@@ -101,7 +103,6 @@ execute "create #{node['wordpress']['db']['database']} database" do
   command "/usr/bin/mysqladmin -u root -p\"#{node['mysql']['server_root_password']}\" create #{node['wordpress']['db']['database']}"
   not_if do
     # Make sure gem is detected if it was just installed earlier in this recipe
-    Gem.clear_paths
     require 'rubygems'
     require 'mysql'
     m = Mysql.new("localhost", "root", node['mysql']['server_root_password'])
