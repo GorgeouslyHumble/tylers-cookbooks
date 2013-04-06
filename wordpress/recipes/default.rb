@@ -27,9 +27,9 @@ include_recipe "apache2::mod_php5"
 # the release of 0.10.10 and the inclusion of the new chef_gem. 
 # code curtesy @hectcastro
 # http://tickets.opscode.com/browse/COOK-1009
-gem_package "mysql" do
-  action :install
-end
+# gem_package "mysql" do
+#   action :install
+# end
 
 if node.has_key?("ec2")
   server_fqdn = node['ec2']['public_hostname']
@@ -102,13 +102,14 @@ execute "create #{node['wordpress']['db']['database']} database" do
   not_if do
     # Make sure gem is detected if it was just installed earlier in this recipe
     require 'rubygems'
-    Gem.clear_paths
+    # Gem.clear_paths
     require 'mysql'
     m = Mysql.new("localhost", "root", node['mysql']['server_root_password'])
     m.list_dbs.include?(node['wordpress']['db']['database'])
   end
   #notifies :create, "ruby_block[save node data]", :immediately unless Chef::Config[:solo]
 end
+
 
 # save node data after writing the MYSQL root password, so that a failed chef-client run that gets this far doesn't cause an unknown password to get applied to the box without being saved in the node data.
 unless Chef::Config[:solo]
