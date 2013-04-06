@@ -27,9 +27,9 @@ include_recipe "apache2::mod_php5"
 # the release of 0.10.10 and the inclusion of the new chef_gem. 
 # code curtesy @hectcastro
 # http://tickets.opscode.com/browse/COOK-1009
-# gem_package "mysql" do
-#   action :install
-# end
+gem_package "mysql" do
+  action :install
+end
 
 
 if node.has_key?("ec2")
@@ -95,20 +95,20 @@ template "#{node['mysql']['conf_dir']}/wp-grants.sql" do
     :password => node['wordpress']['db']['password'],
     :database => node['wordpress']['db']['database']
   )
-  #notifies :run, "execute[mysql-install-wp-privileges]", :immediately
+  notifies :run, "execute[mysql-install-wp-privileges]"
 end
 
 execute "create #{node['wordpress']['db']['database']} database" do
   command "/usr/bin/mysqladmin -u root -p\"#{node['mysql']['server_root_password']}\" create #{node['wordpress']['db']['database']}"
   not_if do
     # Make sure gem is detected if it was just installed earlier in this recipe
-    require 'rubygems'
-    Gem.clear_paths
-    require 'mysql'
-    m = Mysql.new("localhost", "root", node['mysql']['server_root_password'])
-    m.list_dbs.include?(node['wordpress']['db']['database'])
+    # require 'rubygems'
+    # Gem.clear_paths
+    # require 'mysql'
+    # m = Mysql.new("localhost", "root", node['mysql']['server_root_password'])
+    # m.list_dbs.include?(node['wordpress']['db']['database'])
   end
-  #notifies :create, "ruby_block[save node data]", :immediately unless Chef::Config[:solo]
+  notifies :create, "ruby_block[save node data]"
 end
 
 
@@ -140,7 +140,7 @@ template "#{node['wordpress']['dir']}/wp-config.php" do
     :logged_in_key   => node['wordpress']['keys']['logged_in'],
     :nonce_key       => node['wordpress']['keys']['nonce']
   )
-  #notifies :write, "log[Navigate to 'http://#{server_fqdn}/wp-admin/install.php' to complete wordpress installation]"
+  notifies :write, "log[Navigate to 'http://#{server_fqdn}/wp-admin/install.php' to complete wordpress installation]"
 end
 
 apache_site "000-default" do
