@@ -32,13 +32,11 @@ gem_package "mysql" do
 end
 
 
-# if node.has_key?("ec2")
-#   server_fqdn = node['ec2']['public_hostname']
-# else
-#   server_fqdn = node['fqdn']
-# end
-
-server_fqdn = 'automationanarchy'
+if node.has_key?("ec2")
+  server_fqdn = node['ec2']['public_hostname']
+else
+  server_fqdn = node['fqdn']
+end
 
 secure_password = 'secret'
 
